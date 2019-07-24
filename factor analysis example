@@ -17,6 +17,7 @@ bfi_data=bfi_data[complete.cases(bfi_data),]
 names(bfi_data)
 describe(bfi_data)
 
+
 #Create the correlation matrix from bfi_data
 bfi_cor <- cor(bfi_data)
 
@@ -32,6 +33,9 @@ bfi.factor$values
 plot(bfi.factor$values, type = 'b')
 
 bfi.factor$communality
+
+psych::scree(bfi_data)
+psych::fa.parallel(bfi_data)             
 
 options(digits=3)
 bfi.Varimax = principal(bfi_data, nfactors = 3, rotate="varimax")
