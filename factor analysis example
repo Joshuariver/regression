@@ -43,6 +43,13 @@ print(bfi.Varimax,cut=0,digits=3)
 plot(bfi.Varimax)
 fa.diagram(bfi.Varimax)
 
+# Promax 를 사용하여 다른 방식으로 요인분석을 한 사
+
+fac1 <- factanal(bfi_data, 3, rotation = "promax")
+print(fac1, cutoff = .30)
+fl <- round(unclass(fac1$loadings), 2)
+fl
+
 
 factors_data <- fa(r = bfi_cor, nfactors = 3,n.obs = 213,fm="wls")
 
