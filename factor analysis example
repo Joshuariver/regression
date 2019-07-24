@@ -1,0 +1,73 @@
+rm(list=ls())
+setwd("~/R/Factor Analysis")
+options(digits=3)
+
+#Installing the Psych package and loading it
+# install.packages("psych")
+library(psych)
+library(GPArotation)
+
+#Loading the dataset
+
+bfi_data <- read.csv("fa_sample.csv")
+bfi_data <- bfi_data[,2:11]
+
+#Remove rows with missing values and keep only complete cases
+bfi_data=bfi_data[complete.cases(bfi_data),]
+names(bfi_data)
+describe(bfi_data)
+
+#Create the correlation matrix from bfi_data
+bfi_cor <- cor(bfi_data)
+
+#Factor analysis of the data
+
+bt <- bartlett.test(bfi_data)
+bt
+KMO(bfi_data)
+
+bfi.factor <- principal(bfi_data, rotate="none")
+names(bfi.factor)
+bfi.factor$values
+plot(bfi.factor$values, type = 'b')
+
+bfi.factor$communality
+
+options(digits=3)
+bfi.Varimax = principal(bfi_data, nfactors = 3, rotate="varimax")
+print(bfi.Varimax,cut=0,digits=3)
+plot(bfi.Varimax)
+fa.diagram(bfi.Varimax)
+
+
+factors_data <- fa(r = bfi_cor, nfactors = 3,n.obs = 213,fm="wls")
+
+factors_data <- fa(bfi_data, nfactors = 3,n.obs = 213,fm="wls")
+
+# Getting the factor loadings and model analysis
+
+print(factors_data,cut=0,digits=3)
+plot(factors_data)
+fa.diagram(factors_data)
+
+
+# factor analysis using Promax rotation
+
+p3p <-principal(bfi_data,3,n.obs = 213,rotate="Promax")
+print(p3p,cut=0,digits=3)
+plot(p3p)
+fa.diagram(p3p)
+
+
+# A higher order factor solution: Omega
+
+om.h <- omega(bfi_data,n.obs=213,sl=FALSE)
+op <- par(mfrow=c(1,1))
+
+# A bifactor factor solution 
+
+om <- omega(bfi_data,n.obs=213)
+
+# Item Cluster Analysis: iclust : Alternative clustering then Factor Analysis
+
+ic <- iclust(bfi_data)
